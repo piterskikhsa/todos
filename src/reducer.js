@@ -6,9 +6,12 @@ export const reducer = (state, action) => {
       return [...state, action.payload];
 
     case TYPE.CHANGE_CHECKED_TASK:
-      const index = state.findIndex((obj) => obj.id === action.payload.id);
-      let newState = [...state];
-      newState[index] = { ...newState[index], ...action.payload };
+      const newState = state.map((item) => {
+        if (item.id === action.payload.id) {
+          return (item = { ...item, ...action.payload });
+        }
+        return item;
+      });
       return newState;
 
     case TYPE.DELETE_TASK:
