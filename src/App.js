@@ -1,23 +1,12 @@
 import React from "react";
 
 import { Paper, Divider, Button, List, Tabs, Tab } from "@mui/material";
+
 import { AddField } from "./components/AddField";
 import { Item } from "./components/Item";
 import { getNewId } from "./utils";
-
-const reducer = (state, action) => {
-  if (action.type === "ADD_TASK") {
-    return [...state, action.payload];
-  }
-  if (action.type === "CHANGE_CHECKED_TASK") {
-    const index = state.findIndex((obj) => obj.id === action.payload.id);
-    let newState = [...state];
-
-    newState[index] = { ...newState[index], ...action.payload };
-    return newState;
-  }
-  return state;
-};
+import { reducer } from "./reducer";
+import { TYPE } from "./constans";
 
 function App() {
   const [tasks, dispatch] = React.useReducer(reducer, [
@@ -27,11 +16,15 @@ function App() {
 
   const handleAddTask = (data) => {
     const newId = getNewId(tasks);
-    dispatch({ type: "ADD_TASK", payload: { ...data, id: newId } });
+    dispatch({ type: TYPE.ADD_TASK, payload: { ...data, id: newId } });
   };
 
-  const handleChnageChecked = (data) => {
-    dispatch({ type: "CHANGE_CHECKED_TASK", payload: { ...data } });
+  const handleChangeChecked = (data) => {
+    dispatch({ type: TYPE.CHANGE_CHECKED_TASK, payload: { ...data } });
+  };
+
+  const handleRemoveTask = (data) => {
+    dispatch({ type: TYPE.DELETE_TASK, payload: { ...data } });
   };
 
   return (
@@ -55,7 +48,8 @@ function App() {
               key={task.id}
               text={task.text}
               checked={task.checked}
-              changeChecked={handleChnageChecked}
+              changeChecked={handleChangeChecked}
+              removeItem={handleRemoveTask}
             />
           ))}
         </List>
