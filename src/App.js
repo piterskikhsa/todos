@@ -13,18 +13,37 @@ function App() {
     { id: 1, text: "Задача № 1", checked: false },
     { id: 2, text: "Задача № 2", checked: true },
   ]);
+  const [checked, setChecked] = React.useState(false);
+
+  React.useEffect(() => {
+    const newChecked = tasks.every((task) => task.checked);
+    if (checked !== newChecked) {
+      setChecked(newChecked);
+    }
+  }, [tasks, checked]);
 
   const handleAddTask = (data) => {
     const newId = getNewId(tasks);
-    dispatch({ type: TYPE.ADD_TASK, payload: { ...data, id: newId } });
+    dispatch({ type: TYPE.TASK_ADD, payload: { ...data, id: newId } });
   };
 
-  const handleChangeChecked = (data) => {
-    dispatch({ type: TYPE.CHANGE_CHECKED_TASK, payload: { ...data } });
+  const handleChangeChecked = (id) => {
+    dispatch({ type: TYPE.TASK_TOGGLE_CHECKED, payload: { id } });
   };
 
-  const handleRemoveTask = (data) => {
-    dispatch({ type: TYPE.DELETE_TASK, payload: { ...data } });
+  const handleRemoveTask = (id) => {
+    dispatch({ type: TYPE.TASK_DELETE, payload: { id } });
+  };
+
+  const handleToggleAllTask = () => {
+    dispatch({
+      type: TYPE.TASK_TOGGLE_CHECKED_ALL,
+      payload: { checked: !checked },
+    });
+  };
+
+  const handleRemoveAllTask = () => {
+    dispatch({ type: TYPE.TASK_CLEAR });
   };
 
   return (
@@ -55,8 +74,10 @@ function App() {
         </List>
         <Divider />
         <div className="check-buttons">
-          <Button>Отметить всё</Button>
-          <Button>Очистить</Button>
+          <Button onClick={handleToggleAllTask}>
+            {checked ? "Снять отметки" : "Отметить всё"}
+          </Button>
+          <Button onClick={handleRemoveAllTask}>Очистить</Button>
         </div>
       </Paper>
     </div>
