@@ -9,7 +9,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 export const Item = ({ id, text, checked, changeChecked, removeItem }) => {
   const handleRemoveItem = () => {
     if (window.confirm("Точно удалить задачу?")) {
-      removeItem({ id });
+      removeItem(id);
     }
   };
 
@@ -21,7 +21,7 @@ export const Item = ({ id, text, checked, changeChecked, removeItem }) => {
           checkedIcon={<CheckCircleIcon />}
           checked={!!checked}
           onChange={(e) => {
-            changeChecked({ id: id, checked: e.target.checked });
+            changeChecked(id);
           }}
         />
         <Typography className="item-text">{text}</Typography>
